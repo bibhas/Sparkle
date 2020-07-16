@@ -27,6 +27,7 @@
 #import "SUSystemUpdateInfo.h"
 #import "SUSignatures.h"
 #import "SUOperatingSystem.h"
+#import "SUGlobalUpdateLock.h"
 
 NSString *const SUUpdaterDidFinishLoadingAppCastNotification = @"SUUpdaterDidFinishLoadingAppCastNotification";
 NSString *const SUUpdaterDidFindValidUpdateNotification = @"SUUpdaterDidFindValidUpdateNotification";
@@ -213,13 +214,17 @@ static NSString *const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefaults
     if (!hasLaunchedBefore) {
         [self.host setBool:YES forUserDefaultsKey:SUHasLaunchedBeforeKey];
     }
-    // Relanching from app update?
+    // Relaunching from app update?
     else if ([self.host boolForUserDefaultsKey:SUUpdateRelaunchingMarkerKey]) {
         if ([self.delegate respondsToSelector:@selector(updaterDidRelaunchApplication:)]) {
             [self.delegate updaterDidRelaunchApplication:self];
         }
         //Reset flag back to NO.
         [self.host setBool:NO forUserDefaultsKey:SUUpdateRelaunchingMarkerKey];
+        // Since we just restarted following an update, release (invalidate) any active locks.
+        // Note that this lock could've been set by a thirdparty agent. Regardless, it makes sense
+        // that we invalidate it because the update is technically complete.
+        [[SUGlobalUpdateLock sharedLock] unlock];
     }
 
     if (shouldPrompt) {
@@ -378,12 +383,16 @@ static NSString *const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefaults
 {
 	if ([self updateInProgress]) { return; }
 	if (self.checkTimer) { [self.checkTimer invalidate]; self.checkTimer = nil; }		// Timer is non-repeating, may have invalidated itself, so we had to retain it.
-
+    
+    // Ensure no other thirdparty agent is concurrently updating this app.
+    if (![[SUGlobalUpdateLock sharedLock] tryLock]) { return; }
+    
     [self updateLastUpdateCheckDate];
 
     if( [self.delegate respondsToSelector: @selector(updaterMayCheckForUpdates:)] && ![self.delegate updaterMayCheckForUpdates: self] )
 	{
         [self scheduleNextUpdateCheck];
+        [[SUGlobalUpdateLock sharedLock] unlock];
         return;
     }
 
@@ -393,6 +402,7 @@ static NSString *const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefaults
     if (!self.driver)
     {
         [self scheduleNextUpdateCheck];
+        [[SUGlobalUpdateLock sharedLock] unlock];
         return;
     }
 
@@ -400,9 +410,14 @@ static NSString *const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefaults
 
     NSURL *theFeedURL = [self parameterizedFeedURL];
     if (theFeedURL) // Use a NIL URL to cancel quietly.
+    {
         [self.driver checkForUpdatesAtURL:theFeedURL host:self.host];
+    }
     else
+    {
+        [[SUGlobalUpdateLock sharedLock] unlock];
         [self.driver abortUpdate];
+    }
 }
 
 - (void)registerAsObserver

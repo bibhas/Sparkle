@@ -10,6 +10,7 @@
 #import "SUUpdaterPrivate.h"
 #import "SUHost.h"
 #import "SULog.h"
+#import "SUGlobalUpdateLock.h"
 
 NSString *const SUUpdateDriverFinishedNotification = @"SUUpdateDriverFinished";
 
@@ -50,6 +51,7 @@ NSString *const SUUpdateDriverFinishedNotification = @"SUUpdateDriverFinished";
 {
     [self setValue:@YES forKey:@"finished"];
     [[NSNotificationCenter defaultCenter] postNotificationName:SUUpdateDriverFinishedNotification object:self];
+    [[SUGlobalUpdateLock sharedLock] unlock];
 }
 
 -(BOOL)resumeUpdateInteractively {

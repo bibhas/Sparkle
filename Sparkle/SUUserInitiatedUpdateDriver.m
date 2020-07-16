@@ -12,6 +12,7 @@
 #import "SUHost.h"
 #import "SULocalizations.h"
 #import "SUApplicationInfo.h"
+#import "SUGlobalUpdateLock.h"
 
 @interface SUUserInitiatedUpdateDriver ()
 

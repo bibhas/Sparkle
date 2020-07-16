@@ -30,6 +30,8 @@
 #import "SPUDownloaderDeprecated.h"
 #import "SPUDownloaderSession.h"
 
+#import "SUGlobalUpdateLock.h"
+
 @interface SUBasicUpdateDriver ()
 
 @property (strong) SUAppcastItem *updateItem;
@@ -314,7 +316,7 @@
                       willDownloadUpdate:self.updateItem
                              withRequest:request];
     }
-
+    
     if (SUAVAILABLE(10, 9)) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunguarded-availability"

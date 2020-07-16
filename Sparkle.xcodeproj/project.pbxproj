@@ -275,6 +275,8 @@
 		767B61AC1972D488004E0C3C /* SUGuidedPackageInstaller.h in Headers */ = {isa = PBXBuildFile; fileRef = 767B61AA1972D488004E0C3C /* SUGuidedPackageInstaller.h */; };
 		767B61AD1972D488004E0C3C /* SUGuidedPackageInstaller.m in Sources */ = {isa = PBXBuildFile; fileRef = 767B61AB1972D488004E0C3C /* SUGuidedPackageInstaller.m */; };
 		767B61AE1972D488004E0C3C /* SUGuidedPackageInstaller.m in Sources */ = {isa = PBXBuildFile; fileRef = 767B61AB1972D488004E0C3C /* SUGuidedPackageInstaller.m */; };
+		A3D88A8124BC270000A78A4E /* SUGlobalUpdateLock.h in Headers */ = {isa = PBXBuildFile; fileRef = A3D88A7F24BC270000A78A4E /* SUGlobalUpdateLock.h */; };
+		A3D88A8224BC270000A78A4E /* SUGlobalUpdateFileLock.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D88A8024BC270000A78A4E /* SUGlobalUpdateFileLock.m */; };
 		A5BF4F1D1BC7668B007A052A /* SUTestWebServer.m in Sources */ = {isa = PBXBuildFile; fileRef = A5BF4F1C1BC7668B007A052A /* SUTestWebServer.m */; };
 		B2D3F865245CEA24009BA78C /* URL+Hashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D3F864245CEA24009BA78C /* URL+Hashing.swift */; };
 		C23E885B1BE7B24F0050BB73 /* SparkleTestCodeSignApp.enc.dmg in Resources */ = {isa = PBXBuildFile; fileRef = C23E88591BE7AF890050BB73 /* SparkleTestCodeSignApp.enc.dmg */; };
@@ -944,6 +946,8 @@
 		767B61AB1972D488004E0C3C /* SUGuidedPackageInstaller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUGuidedPackageInstaller.m; sourceTree = "<group>"; };
 		8DC2EF5A0486A6940098B216 /* Sparkle-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Sparkle-Info.plist"; sourceTree = "<group>"; };
 		8DC2EF5B0486A6940098B216 /* Sparkle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Sparkle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3D88A7F24BC270000A78A4E /* SUGlobalUpdateLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUGlobalUpdateLock.h; sourceTree = "<group>"; };
+		A3D88A8024BC270000A78A4E /* SUGlobalUpdateFileLock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUGlobalUpdateFileLock.m; sourceTree = "<group>"; };
 		A5BF4F1B1BC7668B007A052A /* SUTestWebServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SUTestWebServer.h; sourceTree = "<group>"; };
 		A5BF4F1C1BC7668B007A052A /* SUTestWebServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SUTestWebServer.m; sourceTree = "<group>"; };
 		B2D3F864245CEA24009BA78C /* URL+Hashing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Hashing.swift"; sourceTree = "<group>"; };
@@ -1535,6 +1539,8 @@
 				61299A2E09CA2DAB00B7442F /* SUSignatureVerifier.m */,
 				729924711DF3478A00DBCDF5 /* SUUpdateValidator.h */,
 				729924721DF3478A00DBCDF5 /* SUUpdateValidator.m */,
+				A3D88A7F24BC270000A78A4E /* SUGlobalUpdateLock.h */,
+				A3D88A8024BC270000A78A4E /* SUGlobalUpdateFileLock.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -1652,6 +1658,7 @@
 				611142E910FB1BE5009810AA /* bspatch.h in Headers */,
 				5AB8F185214D564C00A1187F /* ed25519.h in Headers */,
 				5AB8F184214D564C00A1187F /* fe.h in Headers */,
+				A3D88A8124BC270000A78A4E /* SUGlobalUpdateLock.h in Headers */,
 				5AB8F18A214D564C00A1187F /* fixedint.h in Headers */,
 				5AB8F18B214D564C00A1187F /* ge.h in Headers */,
 				5AB8F187214D564C00A1187F /* precomp_data.h in Headers */,
@@ -2394,6 +2401,7 @@
 				6102FE4B0E07803800F85D09 /* SUDiskImageUnarchiver.m in Sources */,
 				7275F9C21B5F1F2900B1D19E /* SUFileManager.m in Sources */,
 				722954C51D04E66F00ECF9CA /* SUFileOperationConstants.m in Sources */,
+				A3D88A8224BC270000A78A4E /* SUGlobalUpdateFileLock.m in Sources */,
 				767B61AD1972D488004E0C3C /* SUGuidedPackageInstaller.m in Sources */,
 				61EF67560E25B58D00F754E0 /* SUHost.m in Sources */,
 				618FA5020DAE88B40026945C /* SUInstaller.m in Sources */,
@@ -2808,6 +2816,7 @@
 			baseConfigurationReference = FA1941CA0D94A70100DD942E /* ConfigFrameworkDebug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				DEFINES_MODULE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -2819,6 +2828,7 @@
 			baseConfigurationReference = FA1941D50D94A70100DD942E /* ConfigFrameworkRelease.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
 				DEFINES_MODULE = YES;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 			};

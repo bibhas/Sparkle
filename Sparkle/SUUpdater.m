@@ -221,10 +221,10 @@ static NSString *const SUUpdaterDefaultsObservationContext = @"SUUpdaterDefaults
         }
         //Reset flag back to NO.
         [self.host setBool:NO forUserDefaultsKey:SUUpdateRelaunchingMarkerKey];
-        // Since we just restarted following an update, release (invalidate) any active locks.
+        // Since we just restarted following an update, invalidate any and all active locks.
         // Note that this lock could've been set by a thirdparty agent. Regardless, it makes sense
         // that we invalidate it because the update is technically complete.
-        [[SUGlobalUpdateLock sharedLock] unlock];
+        [[SUGlobalUpdateLock sharedLock] forceUnlock];
     }
 
     if (shouldPrompt) {

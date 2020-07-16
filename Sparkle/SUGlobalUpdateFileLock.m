@@ -97,7 +97,8 @@
     [self iterateLockFilesForTarget:[self identifier] agent:nil withBlock:^(NSString *filepath, NSString *agent) {
     #pragma unused(agent)
         NSError *error = nil;
-        [fileManager removeItemAtPath:filepath error:&error];
+        NSString *fileLockPath = [NSString stringWithFormat:@"%@/%@", kLockFilePathPrefix, filepath];
+        [fileManager removeItemAtPath:fileLockPath error:&error];
         if (error != nil) {
             SULog(SULogLevelError, @"Unable to delete %@! (%@)", filepath, [error localizedDescription]);
         }

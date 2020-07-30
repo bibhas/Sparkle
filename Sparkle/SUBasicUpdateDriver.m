@@ -536,11 +536,13 @@
             [invocation setTarget:self];
             postponedOnce = YES;
             if ([updaterDelegate updater:self.updater shouldPostponeRelaunchForUpdate:self.updateItem untilInvoking:invocation]) {
+                [[SUGlobalUpdateLock sharedLock] unlock];
                 return;
             }
         } else if ([updaterDelegate respondsToSelector:@selector(updater:shouldPostponeRelaunchForUpdate:)]) {
             postponedOnce = YES;
             if ([updaterDelegate updater:self.updater shouldPostponeRelaunchForUpdate:self.updateItem]) {
+                [[SUGlobalUpdateLock sharedLock] unlock];
                 return;
             }
         }
@@ -553,6 +555,7 @@
     NSBundle *sparkleBundle = updater.sparkleBundle;
     if (!sparkleBundle) {
         SULog(SULogLevelError, @"Sparkle bundle is gone?");
+        [[SUGlobalUpdateLock sharedLock] unlock];
         return;
     }
 
@@ -642,6 +645,9 @@
                                                                     self.tempDir,
                                                                     relaunch ? @"1" : @"0",
                                                                     showUI ? @"1" : @"0"]];
+    
+    [[SUGlobalUpdateLock sharedLock] unlock];
+
     [self terminateApp];
 }
 

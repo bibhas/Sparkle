@@ -127,7 +127,7 @@
 
 - (NSString *)fileLockPathForTargetIdentifier:(NSString *)aTargetIdentifier agentIdentifier:(NSString *)aAgentIdentifier
 {
-    return [NSString stringWithFormat:@"%@/%@_%@_Sparkle.pid", kLockFilePathPrefix, aTargetIdentifier, aAgentIdentifier];
+    return [NSString stringWithFormat:@"%@/%@_%@.Sparkle.pid", kLockFilePathPrefix, aTargetIdentifier, aAgentIdentifier];
 }
 
 - (void)iterateLockFilesForTarget:(NSString *)aTargetIdentifier agent:(NSString *)aAgentIdentifier withBlock:(void(^)(NSString *, NSString *))aBlock
@@ -136,7 +136,7 @@
     NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:kLockFilePattern options:0 error:&error];
     NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:kLockFilePathPrefix error:nil];
     for (NSString *file in contents) {
-        if (![file hasSuffix:@"_Sparkle.pid"]) {
+        if (![file hasSuffix:@".Sparkle.pid"]) {
             continue;
         }
         NSArray<NSTextCheckingResult *> *matches = [regex matchesInString:file options:0 range:NSMakeRange(0, [file length])];
